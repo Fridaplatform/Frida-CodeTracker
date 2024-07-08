@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "frida-codetracker.helloWorld",
-        "title": "Hello World"
+        "command": "frida-codetracker.showData",
+        "title": "Show Data"
       }
     ]
   },
