@@ -61,7 +61,10 @@ function updateStatusBar(){
     for (const fileType in trackingData) {
         totalTime += trackingData[fileType].time;
     }
-    const formattedTime = (totalTime / 1000 / 60).toFixed(2); // Convert to minutes
+	const totalSeconds = Math.floor(totalTime / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     statusBarItem.text = `$(clock) Frida-CodeTracker: ${formattedTime} min`;
     statusBarItem.show();
 }
