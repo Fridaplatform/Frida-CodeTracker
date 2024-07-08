@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "frida-codetracker.showData",
-        "title": "Show Data"
+        "title": "Frida-CodeTracker: Show Data"
       }
     ]
   },

@@ -31,7 +31,8 @@ exports.updateStatusBar = updateStatusBar;
 const vscode = __importStar(require("vscode"));
 const tracker_1 = require("./tracker");
 const webView_1 = require("./webView");
-let statusBarItem;
+let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+console.log('aaaaa');
 (function initializeComponents() {
     console.log('entered components');
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
@@ -50,8 +51,8 @@ function activate(context) {
     console.log('Congratulations, your extension "frida-codetracker" is now active!');
     vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
     (0, tracker_1.startTracking)(context);
-    context.subscriptions.push(statusBarItem);
     updateStatusBar();
+    context.subscriptions.push(statusBarItem);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
@@ -63,6 +64,7 @@ function activate(context) {
     });
     context.subscriptions.push(disposable);
     (0, tracker_1.startChronometer)('initial');
+    console.log('chronometer started');
 }
 // This method is called when your extension is deactivated
 function deactivate() {

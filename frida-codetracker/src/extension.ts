@@ -4,8 +4,9 @@ import * as vscode from 'vscode';
 import { startTracking, stopTracking, trackingData, startChronometer } from './tracker';
 import { getWebViewContent } from './webView';
 
-let statusBarItem: vscode.StatusBarItem;
+let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 
+console.log('aaaaa');
 (function initializeComponents(){
 	console.log('entered components');
 	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
@@ -27,8 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
 	startTracking(context);
 
-	context.subscriptions.push(statusBarItem);
 	updateStatusBar();
+	context.subscriptions.push(statusBarItem);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -47,6 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 	startChronometer('initial');
+	console.log('chronometer started');
 }
 
 // This method is called when your extension is deactivated
