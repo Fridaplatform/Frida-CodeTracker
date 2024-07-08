@@ -41,16 +41,15 @@ console.log('aaaaa');
     statusBarItem.show();
     console.log('initialized components');
 });
-console.log('will it activate?');
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    console.log('entered activation');
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "frida-codetracker" is now active!');
     vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
     (0, tracker_1.startTracking)(context);
+    console.log('started Tracking');
     updateStatusBar();
     context.subscriptions.push(statusBarItem);
     // The command has been defined in the package.json file
@@ -63,8 +62,6 @@ function activate(context) {
         panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
     });
     context.subscriptions.push(disposable);
-    (0, tracker_1.startChronometer)('initial');
-    console.log('chronometer started');
 }
 // This method is called when your extension is deactivated
 function deactivate() {
