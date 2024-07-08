@@ -39,7 +39,7 @@ function onTextSelect(event: vscode.TextEditorSelectionChangeEvent){
     continueChronometer(event.textEditor.document.languageId);
 }
 
-function startChronometer(fileType:string){
+export function startChronometer(fileType:string){
     stopChronometer();
     currentFileType = fileType;
     startTime = Date.now();

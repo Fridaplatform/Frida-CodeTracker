@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.trackingData = void 0;
 exports.startTracking = startTracking;
+exports.startChronometer = startChronometer;
 exports.stopTracking = stopTracking;
 const vscode = __importStar(require("vscode"));
 const extension_1 = require("./extension");

@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { startTracking, stopTracking, trackingData } from './tracker';
+import { startTracking, stopTracking, trackingData, startChronometer } from './tracker';
 import { getWebViewContent } from './webView';
 
 let statusBarItem: vscode.StatusBarItem;
@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+	startChronometer('initial');
 }
 
 // This method is called when your extension is deactivated

@@ -54,6 +54,7 @@ function activate(context) {
         panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
     });
     context.subscriptions.push(disposable);
+    (0, tracker_1.startChronometer)('initial');
 }
 // This method is called when your extension is deactivated
 function deactivate() {
