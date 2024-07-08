@@ -6,9 +6,20 @@ import { getWebViewContent } from './webView';
 
 let statusBarItem: vscode.StatusBarItem;
 
+(function initializeComponents(){
+	console.log('entered components');
+	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	statusBarItem.command = 'frida-codetracker.showData';
+	statusBarItem.text = '${clock} Frida-CodeTracker: 0.00 min';
+	statusBarItem.show();
+	console.log('initialized components');
+});
+
+console.log('will it activate?');
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	console.log('entered activation');
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -16,8 +27,6 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
 	startTracking(context);
 
-	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	statusBarItem.command = 'frida-code-tracker.showData';
 	context.subscriptions.push(statusBarItem);
 	updateStatusBar();
 

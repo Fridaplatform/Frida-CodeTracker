@@ -1,57 +1,42 @@
 import * as vscode from 'vscode';
+import { TrackingData } from './tracker';
 
-export function getWebViewContent(trackingData: { [key: string]: { time: number, date: string } }): string {
-    const chartData = JSON.stringify(trackingData);
-
-    return `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Frida Code Tracker</title>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        </head>
-        <body>
-            <canvas id="fileTypeChart" width="400" height="200"></canvas>
-            <script>
-                const ctx = document.getElementById('fileTypeChart').getContext('2d');
-                const data = ${chartData};
-                const labels = Object.keys(data);
-                const values = Object.values(data).map(item => item.time);
-                const dates = Object.values(data).map(item => item.date);
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Time Spent (ms)',
-                            data: values,
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    afterLabel: function(context) {
-                                        return 'Date: ' + dates[context.dataIndex];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            </script>
-        </body>
-        </html>
+export function getWebViewContent(trackingData: TrackingData): string {
+    let content = `
+    <html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            .chart {
+                width: 600px;
+                height: 400px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Frida Code Tracker</h1>
+        <div class="chart">
+            <h2>Most Used File Types</h2>
+            <ul>
     `;
+
+    for (const fileType in trackingData) {
+        content += `<li>${fileType}: ${(trackingData[fileType].time / 1000 / 60).toFixed(2)} min</li>`;
+    }
+
+    content += `
+            </ul>
+        </div>
+        <div class="chart">
+            <h2>General Activity</h2>
+            <p>Total coding time: ${(Object.values(trackingData).reduce((acc, { time }) => acc + time, 0) / 1000 / 60).toFixed(2)} min</p>
+        </div>
+    </body>
+    </html>
+    `;
+
+    return content;
 }
+

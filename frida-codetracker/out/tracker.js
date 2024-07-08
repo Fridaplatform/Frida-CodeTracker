@@ -25,80 +25,68 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.trackingData = void 0;
 exports.startTracking = startTracking;
-exports.startChronometer = startChronometer;
 exports.stopTracking = stopTracking;
+exports.startChronometer = startChronometer;
 const vscode = __importStar(require("vscode"));
 const extension_1 = require("./extension");
-let activityTimeout;
-let trackingData = {};
+const trackingData = {};
 exports.trackingData = trackingData;
-let currentFileType = '';
-let startTime = 0;
-let isFlatLined = true;
+let chronometerInterval;
+let activityTimeout;
 const FLATLINE_TIME = 5 * 60 * 1000;
 function startTracking(context) {
     context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(onFileOpen));
     context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(onTextChange));
     context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(onFileSwitch));
     context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(onTextSelect));
-}
-function onFileOpen(document) {
-    startChronometer(document.languageId);
-}
-function onTextChange(event) {
-    continueChronometer(event.document.languageId);
-}
-function onFileSwitch(editor) {
-    if (editor) {
-        const fileType = editor.document.languageId;
-        if (currentFileType === fileType) {
-            continueChronometer(fileType); // Continue the existing chronometer
-        }
-        else {
-            startChronometer(fileType); // Start a new chronometer for a different file type
-        }
-    }
-}
-function onTextSelect(event) {
-    continueChronometer(event.textEditor.document.languageId);
-}
-function startChronometer(fileType) {
-    stopChronometer();
-    currentFileType = fileType;
-    startTime = Date.now();
-    activityTimeout = setTimeout(flatline, FLATLINE_TIME);
-}
-function continueChronometer(fileType) {
-    if (isFlatLined = false) {
-        startChronometer(fileType); // Restart the chronometer if had been flatlined
-    }
-    else {
-        clearTimeout(activityTimeout);
-        activityTimeout = setTimeout(flatline, FLATLINE_TIME);
-    }
-}
-function stopChronometer() {
-    if (startTime !== 0 && currentFileType) {
-        const elapsedTime = Date.now() - startTime;
-        const date = new Date().toLocaleDateString();
-        if (trackingData[currentFileType]) {
-            trackingData[currentFileType].time += elapsedTime;
-        }
-        else {
-            trackingData[currentFileType] = { time: elapsedTime, date: date };
-        }
-        (0, extension_1.updateStatusBar)(); // Update status bar when time is logged
-    }
-    clearTimeout(activityTimeout);
-    startTime = 0;
-    currentFileType = '';
-}
-function flatline() {
-    stopChronometer();
-    vscode.window.showInformationMessage('Frida-CodeTracker: No activity detected for 5 minutes.');
-    isFlatLined = true;
+    startChronometer('initial');
 }
 function stopTracking() {
     stopChronometer();
+}
+function onFileOpen(document) {
+    resetInactivityTimer(document.languageId);
+}
+function onTextChange(event) {
+    resetInactivityTimer(event.document.languageId);
+}
+function onFileSwitch(editor) {
+    if (editor) {
+        resetInactivityTimer(editor.document.languageId);
+    }
+}
+function onTextSelect(event) {
+    if (event.textEditor) {
+        resetInactivityTimer(event.textEditor.document.languageId);
+    }
+}
+function startChronometer(languageId) {
+    if (!trackingData[languageId]) {
+        trackingData[languageId] = { time: 0, lastStart: 0 };
+    }
+    if (!chronometerInterval) {
+        chronometerInterval = setInterval(() => {
+            trackingData[languageId].time += 1000;
+            (0, extension_1.updateStatusBar)();
+        }, 1000);
+    }
+}
+function stopChronometer() {
+    if (chronometerInterval) {
+        clearInterval(chronometerInterval);
+        chronometerInterval = undefined;
+    }
+}
+function resetInactivityTimer(languageId) {
+    if (activityTimeout) {
+        clearTimeout(activityTimeout);
+    }
+    if (!chronometerInterval) {
+        startChronometer(languageId);
+    }
+    activityTimeout = setTimeout(() => {
+        vscode.window.showInformationMessage('No activity detected, tracking stopped.');
+        stopChronometer();
+    }, FLATLINE_TIME);
 }
 //# sourceMappingURL=tracker.js.map
