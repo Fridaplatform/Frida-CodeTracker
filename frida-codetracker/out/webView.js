@@ -14,6 +14,17 @@ function getWebViewContent(trackingData, activityData) {
                     data: filedata,
                     backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
                 }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
         }
     };
     const activityPieChartConfig = {
@@ -24,6 +35,17 @@ function getWebViewContent(trackingData, activityData) {
                     data: activityValues,
                     backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
                 }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
         }
     };
     const totalTime = filedata.reduce((a, b) => a + b, 0).toFixed(2);

@@ -74,10 +74,11 @@ function updateStatusBar() {
         totalTime += tracker_1.trackingData[fileType].time;
     }
     const totalSeconds = Math.floor(totalTime / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    statusBarItem.text = `$(clock) Frida-CodeTracker: ${formattedTime} min`;
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    statusBarItem.text = `$(clock) Frida-CodeTracker: ${formattedTime}`;
     statusBarItem.show();
 }
 //# sourceMappingURL=extension.js.map

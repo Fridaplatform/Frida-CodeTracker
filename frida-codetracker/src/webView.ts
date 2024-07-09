@@ -16,6 +16,17 @@ export function getWebViewContent(trackingData: TrackingData, activityData: { [k
                 data: filedata,
                 backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
             }]
+        },
+        options: {
+            plugins:{
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
         }
     };
 
@@ -27,6 +38,17 @@ export function getWebViewContent(trackingData: TrackingData, activityData: { [k
                 data: activityValues,
                 backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
             }]
+        },
+        options: {
+            plugins:{
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
         }
     };
 
