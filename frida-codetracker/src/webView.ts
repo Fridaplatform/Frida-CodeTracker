@@ -44,9 +44,15 @@ export function getWebViewContent(trackingData: TrackingData, activityData: { [k
             <title>Frida Code Tracker</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <style>
+                .chart-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 20px 0;
+                }
                 canvas {
-                    width: 25% !important; /* Adjusts the width to 25% of its parent element */
-                    height: 25%; /* Maintains aspect ratio */
+                    width: 200px !important;
+                    height: 200px !important;
                 }
             </style>
         </head>
