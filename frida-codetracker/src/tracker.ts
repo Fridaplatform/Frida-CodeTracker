@@ -10,7 +10,7 @@ export interface TrackingData{
 
 const trackingData: TrackingData = {};
 const activityData: { [key: string]: number } = {
-    'Opening Files': 0,
+    'Opening Projects': 0,
     'Coding' : 0,
     'File Switching': 0,
     'Text Selecting': 0,
@@ -41,7 +41,7 @@ export function stopTracking(){
 
 function onFileOpen(document: vscode.TextDocument){
     resetInactivityTimer(document.languageId);
-    activityData['Opening Files'] += 1;
+    activityData['Opening Projects'] += 1;
 }
 
 function onTextChange(event: vscode.TextDocumentChangeEvent){

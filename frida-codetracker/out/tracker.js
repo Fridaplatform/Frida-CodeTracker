@@ -32,7 +32,7 @@ const extension_1 = require("./extension");
 const trackingData = {};
 exports.trackingData = trackingData;
 const activityData = {
-    'Opening Files': 0,
+    'Opening Projects': 0,
     'Coding': 0,
     'File Switching': 0,
     'Text Selecting': 0,
@@ -60,7 +60,7 @@ function stopTracking() {
 }
 function onFileOpen(document) {
     resetInactivityTimer(document.languageId);
-    activityData['Opening Files'] += 1;
+    activityData['Opening Projects'] += 1;
 }
 function onTextChange(event) {
     resetInactivityTimer(event.document.languageId);
