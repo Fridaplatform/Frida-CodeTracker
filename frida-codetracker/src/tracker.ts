@@ -99,7 +99,7 @@ function resetInactivityTimer(languageId:string){
     }, FLATLINE_TIME);
 }
 
-
+console.log('prueba')
 
 
 export { trackingData, activityData };

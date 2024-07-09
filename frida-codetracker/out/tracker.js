@@ -107,4 +107,5 @@ function resetInactivityTimer(languageId) {
         stopChronometer();
     }, FLATLINE_TIME);
 }
+console.log('prueba');
 //# sourceMappingURL=tracker.js.map
