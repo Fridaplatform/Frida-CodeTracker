@@ -26,7 +26,13 @@ export function startTracking(context: vscode.ExtensionContext){
     context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(onTextChange));
     context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(onFileSwitch));
     context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(onTextSelect));
-    startChronometer('initial');
+    const activeEditor = vscode.window.activeTextEditor;
+    if(activeEditor){
+        const languageId = activeEditor.document.languageId;
+        startChronometer(languageId);
+    }else{
+        startChronometer('initial');
+    }
 }
 
 export function stopTracking(){
