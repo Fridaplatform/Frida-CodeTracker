@@ -60,7 +60,7 @@ function activate(context) {
         const panel = vscode.window.createWebviewPanel('fridaCodeTracker', ' frida code tracker', vscode.ViewColumn.One, {
             enableScripts: true
         });
-        panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
+        panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData, tracker_1.activityData);
     });
     context.subscriptions.push(disposable);
 }

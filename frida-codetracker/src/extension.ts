@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { startTracking, stopTracking, trackingData } from './tracker';
+import { startTracking, stopTracking, trackingData, activityData,  } from './tracker';
 import { getWebViewContent } from './webView';
 
 let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 				enableScripts : true
 			}
 		);
-		panel.webview.html = getWebViewContent(trackingData);
+		panel.webview.html = getWebViewContent(trackingData, activityData);
 	});
 
 	context.subscriptions.push(disposable);

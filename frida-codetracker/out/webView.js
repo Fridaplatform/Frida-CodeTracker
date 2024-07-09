@@ -1,20 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWebViewContent = getWebViewContent;
-function getWebViewContent(trackingData) {
-    const labels = Object.keys(trackingData);
-    const data = labels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
-    const pieChartConfig = {
+function getWebViewContent(trackingData, activityData) {
+    const filelabels = Object.keys(trackingData);
+    const filedata = filelabels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
+    const activityLabels = Object.keys(activityData);
+    const activityValues = activityLabels.map(label => activityData[label]);
+    const filePieChartConfig = {
         type: 'pie',
         data: {
-            labels: labels,
+            labels: filelabels,
             datasets: [{
-                    data: data,
+                    data: filedata,
                     backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
                 }]
         }
     };
-    const totalTime = data.reduce((a, b) => a + b, 0).toFixed(2);
+    const activityPieChartConfig = {
+        type: 'pie',
+        data: {
+            labels: activityLabels,
+            datasets: [{
+                    data: activityValues,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+                }]
+        }
+    };
+    const totalTime = filedata.reduce((a, b) => a + b, 0).toFixed(2);
     // Serialize trackingData to JSON
     const serializedData = JSON.stringify(trackingData);
     return `
@@ -25,6 +37,12 @@ function getWebViewContent(trackingData) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Frida Code Tracker</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <style>
+                canvas {
+                    width: 25% !important; /* Adjusts the width to 25% of its parent element */
+                    height: 25%; /* Maintains aspect ratio */
+                }
+            </style>
         </head>
         <body>
             <h1>Frida Code Tracker</h1>
@@ -35,14 +53,10 @@ function getWebViewContent(trackingData) {
             <canvas id="activityChart"></canvas>
             <script>
                 const ctxFileTypes = document.getElementById('fileTypesChart').getContext('2d');
-                const fileTypesChart = new Chart(ctxFileTypes, ${JSON.stringify(pieChartConfig)});
+                const fileTypesChart = new Chart(ctxFileTypes, ${JSON.stringify(filePieChartConfig)});
 
                 const ctxActivity = document.getElementById('activityChart').getContext('2d');
-                const activityChart = new Chart(ctxActivity, ${JSON.stringify(pieChartConfig)});
-
-                // Example of how to access serialized trackingData
-                const data = ${serializedData};
-                console.log(data); // Use data in JavaScript here
+                const activityChart = new Chart(ctxActivity, ${JSON.stringify(activityPieChartConfig)});
             </script>
         </body>
         </html>`;

@@ -9,6 +9,12 @@ export interface TrackingData{
 }
 
 const trackingData: TrackingData = {};
+const activityData: { [key: string]: number } = {
+    'Opening Files': 0,
+    'Coding' : 0,
+    'File Switching': 0,
+    'Text Selecting': 0,
+};
 
 let chronometerInterval: NodeJS.Timeout | undefined;
 let activityTimeout: NodeJS.Timeout | undefined;
@@ -29,21 +35,25 @@ export function stopTracking(){
 
 function onFileOpen(document: vscode.TextDocument){
     resetInactivityTimer(document.languageId);
+    activityData['Opening Files'] += 1;
 }
 
 function onTextChange(event: vscode.TextDocumentChangeEvent){
     resetInactivityTimer(event.document.languageId);
+    activityData['Coding'] +=1;
 }
 
 function onFileSwitch(editor: vscode.TextEditor | undefined){
     if (editor) {
         resetInactivityTimer(editor.document.languageId);
+        activityData['File Switching'] +=1;
         } 
     }
 
 function onTextSelect(event: vscode.TextEditorSelectionChangeEvent){
     if(event.textEditor){
         resetInactivityTimer(event.textEditor.document.languageId);
+        activityData['Text Selecting']+=1;
     }
 }
 
@@ -86,4 +96,4 @@ function resetInactivityTimer(languageId:string){
 
 
 
-export { trackingData };
+export { trackingData, activityData };

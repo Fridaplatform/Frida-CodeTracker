@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trackingData = void 0;
+exports.activityData = exports.trackingData = void 0;
 exports.startTracking = startTracking;
 exports.stopTracking = stopTracking;
 exports.startChronometer = startChronometer;
@@ -31,6 +31,13 @@ const vscode = __importStar(require("vscode"));
 const extension_1 = require("./extension");
 const trackingData = {};
 exports.trackingData = trackingData;
+const activityData = {
+    'Opening Files': 0,
+    'Coding': 0,
+    'File Switching': 0,
+    'Text Selecting': 0,
+};
+exports.activityData = activityData;
 let chronometerInterval;
 let activityTimeout;
 const FLATLINE_TIME = 5 * 60 * 1000;
@@ -46,18 +53,22 @@ function stopTracking() {
 }
 function onFileOpen(document) {
     resetInactivityTimer(document.languageId);
+    activityData['Opening Files'] += 1;
 }
 function onTextChange(event) {
     resetInactivityTimer(event.document.languageId);
+    activityData['Coding'] += 1;
 }
 function onFileSwitch(editor) {
     if (editor) {
         resetInactivityTimer(editor.document.languageId);
+        activityData['File Switching'] += 1;
     }
 }
 function onTextSelect(event) {
     if (event.textEditor) {
         resetInactivityTimer(event.textEditor.document.languageId);
+        activityData['Text Selecting'] += 1;
     }
 }
 function startChronometer(languageId) {
