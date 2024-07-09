@@ -23,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.trackingData = void 0;
 exports.activate = activate;
 exports.deactivate = deactivate;
 exports.updateStatusBar = updateStatusBar;
@@ -30,16 +31,14 @@ exports.updateStatusBar = updateStatusBar;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
 const tracker_1 = require("./tracker");
+Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return tracker_1.trackingData; } });
 const webView_1 = require("./webView");
 let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-console.log('aaaaa');
 (function initializeComponents() {
-    console.log('entered components');
-    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.command = 'frida-codetracker.showData';
-    statusBarItem.text = '${clock} Frida-CodeTracker: 0.00 min';
+    statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
     statusBarItem.show();
-    console.log('initialized components');
 });
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -58,7 +57,9 @@ function activate(context) {
     const disposable = vscode.commands.registerCommand('frida-codetracker.showData', () => {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
-        const panel = vscode.window.createWebviewPanel('fridaCodeTracker', ' frida code tracker', vscode.ViewColumn.One, {});
+        const panel = vscode.window.createWebviewPanel('fridaCodeTracker', ' frida code tracker', vscode.ViewColumn.One, {
+            enableScripts: true
+        });
         panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
     });
     context.subscriptions.push(disposable);

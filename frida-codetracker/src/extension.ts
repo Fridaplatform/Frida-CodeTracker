@@ -1,19 +1,16 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { startTracking, stopTracking, trackingData, startChronometer } from './tracker';
+import { startTracking, stopTracking, trackingData } from './tracker';
 import { getWebViewContent } from './webView';
 
 let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 
-console.log('aaaaa');
 (function initializeComponents(){
-	console.log('entered components');
-	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.command = 'frida-codetracker.showData';
-	statusBarItem.text = '${clock} Frida-CodeTracker: 0.00 min';
+	statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
 	statusBarItem.show();
-	console.log('initialized components');
 });
 
 // This method is called when your extension is activated
@@ -25,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "frida-codetracker" is now active!');
 	vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
 	startTracking(context);
-	console.log('started Tracking')
+	console.log('started Tracking');
 
 	updateStatusBar();
 	context.subscriptions.push(statusBarItem);
@@ -40,7 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
 			'fridaCodeTracker',
 			' frida code tracker',
 			vscode.ViewColumn.One,
-			{}
+			{
+				enableScripts : true
+			}
 		);
 		panel.webview.html = getWebViewContent(trackingData);
 	});
@@ -66,4 +65,4 @@ function updateStatusBar(){
     statusBarItem.show();
 }
 
-export { updateStatusBar };
+export { updateStatusBar, trackingData };
