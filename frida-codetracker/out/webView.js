@@ -1,17 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWebViewContent = getWebViewContent;
-function getWebViewContent(trackingData, activityData) {
-    const filelabels = Object.keys(trackingData);
-    const filedata = filelabels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
-    const activityLabels = Object.keys(activityData);
-    const activityValues = activityLabels.map(label => activityData[label]);
-    const filePieChartConfig = {
+const tracker_1 = require("./tracker");
+function getWebViewContent(trackingData) {
+    const chronometerLabels = Object.keys(trackingData);
+    const chronometerData = chronometerLabels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
+    const activityLabels = Object.keys(tracker_1.activityData);
+    const activityValues = activityLabels.map(label => tracker_1.activityData[label]);
+    const fileTypeLabels = Object.keys(tracker_1.fileUsageData);
+    const fileTypeData = fileTypeLabels.map(label => tracker_1.fileUsageData[label] / 60); // Convert to hours
+    const mostUsedFileLabels = tracker_1.mostUsedFiles.map(file => file.name);
+    const mostUsedFileData = tracker_1.mostUsedFiles.map(file => file.time / 1000 / 60); // Convert to minutes
+    const chronometerPieChartConfig = {
         type: 'pie',
         data: {
-            labels: filelabels,
+            labels: chronometerLabels,
             datasets: [{
-                    data: filedata,
+                    data: chronometerData,
                     backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
                 }]
         },
@@ -48,7 +53,55 @@ function getWebViewContent(trackingData, activityData) {
             }
         }
     };
-    const totalTime = filedata.reduce((a, b) => a + b, 0).toFixed(2);
+    const fileTypePieChartConfig = {
+        type: 'pie',
+        data: {
+            labels: fileTypeLabels,
+            datasets: [{
+                    data: fileTypeData,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+                }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
+        }
+    };
+    const mostUsedFileBarChartConfig = {
+        type: 'bar',
+        data: {
+            labels: mostUsedFileLabels,
+            datasets: [{
+                    label: 'Most Used Files',
+                    data: mostUsedFileData,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+                }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 32
+                        }
+                    }
+                }
+            }
+        }
+    };
+    const totalTime = chronometerData.reduce((a, b) => a + b, 0).toFixed(2);
     // Serialize trackingData to JSON
     const serializedData = JSON.stringify(trackingData);
     return `
@@ -74,17 +127,26 @@ function getWebViewContent(trackingData, activityData) {
         </head>
         <body>
             <h1>Frida Code Tracker</h1>
-            <h2>Most Used File Types</h2>
-            <canvas id="fileTypesChart"></canvas>
-            <h2>General Activity</h2>
-            <p>Total coding time: ${totalTime} min</p>
+            <h2>Chronometer Chart</h2>
+            <canvas id="chronometerChart"></canvas>
+            <h2>Activity Chart</h2>
             <canvas id="activityChart"></canvas>
+            <h2>File Type Chart</h2>
+            <canvas id="fileTypeChart"></canvas>
+            <h2>Most Used Files</h2>
+            <canvas id="mostUsedFileChart"></canvas>
             <script>
-                const ctxFileTypes = document.getElementById('fileTypesChart').getContext('2d');
-                const fileTypesChart = new Chart(ctxFileTypes, ${JSON.stringify(filePieChartConfig)});
-
+                const ctxChronometer = document.getElementById('chronometerChart').getContext('2d');
+                const chronometerChart = new Chart(ctxChronometer, ${JSON.stringify(chronometerPieChartConfig)});
+                
                 const ctxActivity = document.getElementById('activityChart').getContext('2d');
                 const activityChart = new Chart(ctxActivity, ${JSON.stringify(activityPieChartConfig)});
+
+                const ctxFileType = document.getElementById('fileTypeChart').getContext('2d');
+                const fileTypeChart = new Chart(ctxFileType, ${JSON.stringify(fileTypePieChartConfig)});
+
+                const ctxMostUsedFile = document.getElementById('mostUsedFileChart').getContext('2d');
+                const mostUsedFileChart = new Chart(ctxMostUsedFile, ${JSON.stringify(mostUsedFileBarChartConfig)});
             </script>
         </body>
         </html>`;

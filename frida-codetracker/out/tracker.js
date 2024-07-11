@@ -23,71 +23,116 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activityData = exports.trackingData = void 0;
+exports.mostUsedFiles = exports.fileUsageData = exports.activityData = exports.trackingData = void 0;
 exports.startTracking = startTracking;
 exports.stopTracking = stopTracking;
 exports.startChronometer = startChronometer;
 const vscode = __importStar(require("vscode"));
 const extension_1 = require("./extension");
+;
 const trackingData = {};
 exports.trackingData = trackingData;
 const activityData = {
     'Opening Projects': 0,
     'Coding': 0,
     'File Switching': 0,
-    'Text Selecting': 0,
 };
 exports.activityData = activityData;
+const fileUsageData = {};
+exports.fileUsageData = fileUsageData;
+let mostUsedFiles = [];
+exports.mostUsedFiles = mostUsedFiles;
 let chronometerInterval;
 let activityTimeout;
 const FLATLINE_TIME = 5 * 60 * 1000;
+let currentChronometerId = 1;
 function startTracking(context) {
     context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(onFileOpen));
     context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(onTextChange));
     context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(onFileSwitch));
     context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(onTextSelect));
-    const activeEditor = vscode.window.activeTextEditor;
-    if (activeEditor) {
-        const languageId = activeEditor.document.languageId;
-        startChronometer(languageId);
-    }
-    else {
-        startChronometer('initial');
-    }
+    startChronometer(currentChronometerId);
 }
 function stopTracking() {
     stopChronometer();
 }
 function onFileOpen(document) {
     resetInactivityTimer(document.languageId);
+    const fileData = {
+        name: document.fileName,
+        time: 1000 // Starting time, adjust as needed
+    };
+    trackMostUsedFile(fileData);
     activityData['Opening Projects'] += 1;
 }
 function onTextChange(event) {
     resetInactivityTimer(event.document.languageId);
     activityData['Coding'] += 1;
+    const fileType = getFileType(event.document.fileName);
+    if (!fileUsageData[fileType]) {
+        fileUsageData[fileType] = 0;
+    }
+    fileUsageData[fileType] += 1;
 }
 function onFileSwitch(editor) {
     if (editor) {
         resetInactivityTimer(editor.document.languageId);
         activityData['File Switching'] += 1;
+        const fileType = getFileType(editor.document.fileName);
+        if (!fileUsageData[fileType]) {
+            fileUsageData[fileType] = 0;
+        }
+        fileUsageData[fileType] += 1;
+        const fileData = {
+            name: editor.document.fileName,
+            time: 1000 // Starting time, adjust as needed
+        };
+        trackMostUsedFile(fileData);
+    }
+    else {
+        console.log('no active editor');
     }
 }
 function onTextSelect(event) {
     if (event.textEditor) {
         resetInactivityTimer(event.textEditor.document.languageId);
-        activityData['Text Selecting'] += 1;
+        const fileType = getFileType(event.textEditor.document.fileName);
+        if (!fileUsageData[fileType]) {
+            fileUsageData[fileType] = 0;
+        }
+        fileUsageData[fileType] += 1;
     }
 }
-function startChronometer(languageId) {
-    if (!trackingData[languageId]) {
-        trackingData[languageId] = { time: 0, lastStart: 0 };
+function getFileType(fileName) {
+    const extension = fileName.split('.').pop();
+    return extension ? `.${extension}` : 'Unknown';
+}
+function trackMostUsedFile(file) {
+    console.log('Tracking file:', file.name);
+    const now = Date.now();
+    const existingFileIndex = mostUsedFiles.findIndex(file => file.name === file.name);
+    console.log(existingFileIndex);
+    if (existingFileIndex !== -1) {
+        const elapsedTime = now - mostUsedFiles[existingFileIndex].time;
+        mostUsedFiles[existingFileIndex].time += elapsedTime; // Increase time spent in file
+    }
+    else {
+        mostUsedFiles.push({ name: file.name, time: 1000 }); // Start tracking if not already tracked
+    }
+    const masamenos = mostUsedFiles.sort((a, b) => b.time - a.time); // Sort by descending time
+    console.log(masamenos);
+}
+function startChronometer(chronometerId) {
+    if (!trackingData[chronometerId]) {
+        trackingData[chronometerId] = { time: 0, lastStart: 0 };
     }
     if (!chronometerInterval) {
         chronometerInterval = setInterval(() => {
-            trackingData[languageId].time += 1000;
+            trackingData[chronometerId].time += 1000;
             (0, extension_1.updateStatusBar)();
         }, 1000);
     }
+    currentChronometerId++;
 }
 function stopChronometer() {
     if (chronometerInterval) {
@@ -100,7 +145,7 @@ function resetInactivityTimer(languageId) {
         clearTimeout(activityTimeout);
     }
     if (!chronometerInterval) {
-        startChronometer(languageId);
+        startChronometer(currentChronometerId);
     }
     activityTimeout = setTimeout(() => {
         vscode.window.showInformationMessage('No activity detected, tracking stopped.');

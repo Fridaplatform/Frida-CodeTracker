@@ -33,13 +33,14 @@ const vscode = __importStar(require("vscode"));
 const tracker_1 = require("./tracker");
 Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return tracker_1.trackingData; } });
 const webView_1 = require("./webView");
-let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+//let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+let statusBarItem;
 (function initializeComponents() {
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.command = 'frida-codetracker.showData';
     statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
     statusBarItem.show();
-});
+})();
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -60,7 +61,7 @@ function activate(context) {
         const panel = vscode.window.createWebviewPanel('fridaCodeTracker', ' frida code tracker', vscode.ViewColumn.One, {
             enableScripts: true
         });
-        panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData, tracker_1.activityData);
+        panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
     });
     context.subscriptions.push(disposable);
 }

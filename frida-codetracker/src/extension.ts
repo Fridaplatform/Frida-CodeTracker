@@ -4,14 +4,15 @@ import * as vscode from 'vscode';
 import { startTracking, stopTracking, trackingData, activityData,  } from './tracker';
 import { getWebViewContent } from './webView';
 
-let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+//let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+let statusBarItem:vscode.StatusBarItem;
 
 (function initializeComponents(){
 	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.command = 'frida-codetracker.showData';
 	statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
 	statusBarItem.show();
-});
+})();
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -41,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 				enableScripts : true
 			}
 		);
-		panel.webview.html = getWebViewContent(trackingData, activityData);
+		panel.webview.html = getWebViewContent(trackingData);
 	});
 
 	context.subscriptions.push(disposable);
