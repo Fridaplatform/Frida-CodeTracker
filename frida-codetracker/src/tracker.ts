@@ -8,9 +8,9 @@ export interface TrackingData{
     };
 }
 
-export interface ActivityData{[key:string]:number};
+interface ActivityData{[key:string]:number};
 
-export interface MostUsedFileData{
+interface MostUsedFileData{
     name:string;
     time:number;
 }

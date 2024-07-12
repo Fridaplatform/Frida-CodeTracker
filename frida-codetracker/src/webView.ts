@@ -1,4 +1,4 @@
-import { TrackingData, activityData, fileUsageData, mostUsedFiles, MostUsedFileData } from './tracker';
+import { TrackingData, activityData, fileUsageData, mostUsedFiles } from './tracker';
 
 
 export function getWebViewContent(trackingData: TrackingData) {
