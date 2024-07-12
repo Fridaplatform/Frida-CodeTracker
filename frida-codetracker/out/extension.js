@@ -26,21 +26,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.trackingData = void 0;
 exports.activate = activate;
 exports.deactivate = deactivate;
-exports.updateStatusBar = updateStatusBar;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
+const webView_1 = require("./webView");
 const tracker_1 = require("./tracker");
 const chronometer_1 = require("./chronometer");
 Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return chronometer_1.trackingData; } });
-const webView_1 = require("./webView");
 //let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-let statusBarItem;
 (function initializeComponents() {
-    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-    statusBarItem.command = 'frida-codetracker.showData';
-    statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
-    statusBarItem.show();
+    chronometer_1.statusBarItem.command = 'frida-codetracker.showData';
+    chronometer_1.statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
+    chronometer_1.statusBarItem.show();
 })();
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -51,8 +48,8 @@ function activate(context) {
     vscode.window.showInformationMessage('Frida-CodeTracker is now active! Tracking has started.');
     (0, tracker_1.startTracking)(context);
     console.log('started Tracking');
-    updateStatusBar();
-    context.subscriptions.push(statusBarItem);
+    (0, chronometer_1.updateStatusBar)();
+    context.subscriptions.push(chronometer_1.statusBarItem);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
@@ -69,18 +66,5 @@ function activate(context) {
 // This method is called when your extension is deactivated
 function deactivate() {
     (0, tracker_1.stopTracking)();
-}
-function updateStatusBar() {
-    let totalTime = 0;
-    for (const fileType in chronometer_1.trackingData) {
-        totalTime += chronometer_1.trackingData[fileType].time;
-    }
-    const totalSeconds = Math.floor(totalTime / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    statusBarItem.text = `$(clock) Frida-CodeTracker: ${formattedTime}`;
-    statusBarItem.show();
 }
 //# sourceMappingURL=extension.js.map
