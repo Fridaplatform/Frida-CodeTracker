@@ -4,7 +4,7 @@ import { trackMostUsedFile, activityData} from './tracker';
 import { resetInactivityTimer } from './chronometer';
 
 
-export const fileUsageData:ActivityData = {};
+const fileUsageData:ActivityData = {};
 
 function onFileOpen(document: vscode.TextDocument){
     resetInactivityTimer(document.languageId);
@@ -68,4 +68,4 @@ function getFileType(fileName: string): string {
     return extension ? `.${extension}` : 'Unknown';
 }
 
-export { onFileOpen, onFileSwitch, onTextChange, onTextSelect };
+export { onFileOpen, onFileSwitch, onTextChange, onTextSelect, fileUsageData };

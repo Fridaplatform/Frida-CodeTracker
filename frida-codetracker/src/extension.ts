@@ -1,7 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { startTracking, stopTracking, trackingData  } from './tracker';
+import { startTracking, stopTracking  } from './tracker';
+import { trackingData } from './chronometer';
 import { getWebViewContent } from './webView';
 
 //let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);

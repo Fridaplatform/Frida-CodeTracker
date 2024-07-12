@@ -31,7 +31,8 @@ exports.updateStatusBar = updateStatusBar;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
 const tracker_1 = require("./tracker");
-Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return tracker_1.trackingData; } });
+const chronometer_1 = require("./chronometer");
+Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return chronometer_1.trackingData; } });
 const webView_1 = require("./webView");
 //let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 let statusBarItem;
@@ -61,7 +62,7 @@ function activate(context) {
         const panel = vscode.window.createWebviewPanel('fridaCodeTracker', ' frida code tracker', vscode.ViewColumn.One, {
             enableScripts: true
         });
-        panel.webview.html = (0, webView_1.getWebViewContent)(tracker_1.trackingData);
+        panel.webview.html = (0, webView_1.getWebViewContent)(chronometer_1.trackingData);
     });
     context.subscriptions.push(disposable);
 }
@@ -71,8 +72,8 @@ function deactivate() {
 }
 function updateStatusBar() {
     let totalTime = 0;
-    for (const fileType in tracker_1.trackingData) {
-        totalTime += tracker_1.trackingData[fileType].time;
+    for (const fileType in chronometer_1.trackingData) {
+        totalTime += chronometer_1.trackingData[fileType].time;
     }
     const totalSeconds = Math.floor(totalTime / 1000);
     const hours = Math.floor(totalSeconds / 3600);

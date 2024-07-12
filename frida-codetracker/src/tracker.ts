@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { onFileOpen, onFileSwitch, onTextChange, onTextSelect } from './eventHandlers';
 import { ActivityData, MostUsedFileData } from './interfaces';
-import { trackingData, currentChronometerId, startChronometer, stopChronometer, resetInactivityTimer } from './chronometer';
+import { currentChronometerId, startChronometer, stopChronometer} from './chronometer';
 
 
 const activityData: ActivityData = {
@@ -12,7 +12,7 @@ const activityData: ActivityData = {
 
 let mostUsedFiles: MostUsedFileData[] = [];
 
-export function startTracking(context: vscode.ExtensionContext){
+function startTracking(context: vscode.ExtensionContext){
     context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(onFileOpen));
     context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(onTextChange));
     context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(onFileSwitch));
@@ -20,7 +20,7 @@ export function startTracking(context: vscode.ExtensionContext){
     startChronometer(currentChronometerId);
 }
 
-export function stopTracking(){
+function stopTracking(){
     stopChronometer();
 }
 
@@ -35,11 +35,11 @@ function trackMostUsedFile(file: MostUsedFileData) {
     } else {
         mostUsedFiles.push({ name: file.name, time: 1000 }); // Start tracking if not already tracked
     }
-    const masamenos = mostUsedFiles.sort((a, b) => b.time - a.time); // Sort by descending time
-    console.log(masamenos);
+    const sorted = mostUsedFiles.sort((a, b) => b.time - a.time); // Sort by descending time
+    console.log(sorted);
 }
 
 
 
 
-export { trackingData, activityData, trackMostUsedFile, mostUsedFiles };
+export { activityData, startTracking, stopTracking, trackMostUsedFile, mostUsedFiles };

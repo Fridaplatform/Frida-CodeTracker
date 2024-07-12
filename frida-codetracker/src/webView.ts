@@ -3,7 +3,7 @@ import { fileUsageData } from './eventHandlers';
 import { TrackingData } from './interfaces';
 
 
-export function getWebViewContent(trackingData: TrackingData) {
+function getWebViewContent(trackingData: TrackingData) {
     const chronometerLabels = Object.keys(trackingData);
     const chronometerData = chronometerLabels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
 
@@ -162,3 +162,5 @@ export function getWebViewContent(trackingData: TrackingData) {
         </body>
         </html>`;
 }
+
+export { getWebViewContent };

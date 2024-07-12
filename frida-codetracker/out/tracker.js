@@ -23,14 +23,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mostUsedFiles = exports.activityData = exports.trackingData = void 0;
+exports.mostUsedFiles = exports.activityData = void 0;
 exports.startTracking = startTracking;
 exports.stopTracking = stopTracking;
 exports.trackMostUsedFile = trackMostUsedFile;
 const vscode = __importStar(require("vscode"));
 const eventHandlers_1 = require("./eventHandlers");
 const chronometer_1 = require("./chronometer");
-Object.defineProperty(exports, "trackingData", { enumerable: true, get: function () { return chronometer_1.trackingData; } });
 const activityData = {
     'Opening Projects': 0,
     'Coding': 0,
@@ -61,7 +60,7 @@ function trackMostUsedFile(file) {
     else {
         mostUsedFiles.push({ name: file.name, time: 1000 }); // Start tracking if not already tracked
     }
-    const masamenos = mostUsedFiles.sort((a, b) => b.time - a.time); // Sort by descending time
-    console.log(masamenos);
+    const sorted = mostUsedFiles.sort((a, b) => b.time - a.time); // Sort by descending time
+    console.log(sorted);
 }
 //# sourceMappingURL=tracker.js.map
