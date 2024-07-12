@@ -1,10 +1,16 @@
 import * as vscode from 'vscode';
 import { ActivityData, MostUsedFileData } from './interfaces';
-import { trackMostUsedFile, activityData} from './tracker';
+import { trackMostUsedFile} from './tracker';
 import { resetInactivityTimer } from './chronometer';
 
 
 const fileUsageData:ActivityData = {};
+
+const activityData: ActivityData = {
+    'Opening Projects': 0,
+    'Coding' : 0,
+    'File Switching': 0,
+};
 
 function onFileOpen(document: vscode.TextDocument){
     resetInactivityTimer(document.languageId);
@@ -68,4 +74,4 @@ function getFileType(fileName: string): string {
     return extension ? `.${extension}` : 'Unknown';
 }
 
-export { onFileOpen, onFileSwitch, onTextChange, onTextSelect, fileUsageData };
+export { activityData, onFileOpen, onFileSwitch, onTextChange, onTextSelect, fileUsageData };

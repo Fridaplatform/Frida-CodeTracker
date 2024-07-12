@@ -1,14 +1,7 @@
 import * as vscode from 'vscode';
 import { onFileOpen, onFileSwitch, onTextChange, onTextSelect } from './eventHandlers';
-import { ActivityData, MostUsedFileData } from './interfaces';
+import { MostUsedFileData } from './interfaces';
 import { currentChronometerId, startChronometer, stopChronometer} from './chronometer';
-
-
-const activityData: ActivityData = {
-    'Opening Projects': 0,
-    'Coding' : 0,
-    'File Switching': 0,
-};
 
 let mostUsedFiles: MostUsedFileData[] = [];
 
@@ -42,4 +35,4 @@ function trackMostUsedFile(file: MostUsedFileData) {
 
 
 
-export { activityData, startTracking, stopTracking, trackMostUsedFile, mostUsedFiles };
+export { startTracking, stopTracking, trackMostUsedFile, mostUsedFiles };

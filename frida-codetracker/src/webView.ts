@@ -1,4 +1,5 @@
-import { activityData, mostUsedFiles } from './tracker';
+import { mostUsedFiles } from './tracker';
+import { activityData } from './eventHandlers';
 import { fileUsageData } from './eventHandlers';
 import { TrackingData } from './interfaces';
 
