@@ -23,19 +23,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mostUsedFiles = exports.activityData = void 0;
+exports.mostUsedFiles = void 0;
 exports.startTracking = startTracking;
 exports.stopTracking = stopTracking;
 exports.trackMostUsedFile = trackMostUsedFile;
 const vscode = __importStar(require("vscode"));
 const eventHandlers_1 = require("./eventHandlers");
 const chronometer_1 = require("./chronometer");
-const activityData = {
-    'Opening Projects': 0,
-    'Coding': 0,
-    'File Switching': 0,
-};
-exports.activityData = activityData;
 let mostUsedFiles = [];
 exports.mostUsedFiles = mostUsedFiles;
 function startTracking(context) {
