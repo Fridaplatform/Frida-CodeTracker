@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWebViewContent = getWebViewContent;
 const tracker_1 = require("./tracker");
+const eventHandlers_1 = require("./eventHandlers");
 function getWebViewContent(trackingData) {
     const chronometerLabels = Object.keys(trackingData);
     const chronometerData = chronometerLabels.map(label => trackingData[label].time / 1000 / 60); // Convert to minutes
     const activityLabels = Object.keys(tracker_1.activityData);
     const activityValues = activityLabels.map(label => tracker_1.activityData[label]);
-    const fileTypeLabels = Object.keys(tracker_1.fileUsageData);
-    const fileTypeData = fileTypeLabels.map(label => tracker_1.fileUsageData[label] / 60); // Convert to hours
+    const fileTypeLabels = Object.keys(eventHandlers_1.fileUsageData);
+    const fileTypeData = fileTypeLabels.map(label => eventHandlers_1.fileUsageData[label] / 60); // Convert to hours
     const mostUsedFileLabels = tracker_1.mostUsedFiles.map(file => file.name);
     const mostUsedFileData = tracker_1.mostUsedFiles.map(file => file.time / 1000 / 60); // Convert to minutes
     const chronometerPieChartConfig = {
