@@ -13,7 +13,6 @@ function startChronometer(chronometerId: number){
     if(!trackingData[chronometerId]){
         trackingData[chronometerId] = { time: 0, lastStart: 0 };
     }
-
     if(!chronometerInterval){
         chronometerInterval = setInterval(() => {
             trackingData[chronometerId].time += 1000;
@@ -34,11 +33,9 @@ function resetInactivityTimer(languageId:string){
     if(activityTimeout){
         clearTimeout(activityTimeout);
     }
-
     if(!chronometerInterval){
         startChronometer(currentChronometerId);
     }
-
     activityTimeout = setTimeout(() => {
         vscode.window.showInformationMessage('No activity detected, tracking stopped.');
         stopChronometer();
