@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { onFileOpen, onFileSwitch, onTextChange, onTextSelect } from './eventHandlers';
 import { MostUsedFileData } from './interfaces';
+import { onFileOpen, onFileSwitch, onTextChange, onTextSelect } from './eventHandlers';
 import { currentChronometerId, startChronometer, stopChronometer} from './chronometer';
 
 let mostUsedFiles: MostUsedFileData[] = [];

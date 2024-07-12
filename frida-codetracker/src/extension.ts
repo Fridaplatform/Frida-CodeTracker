@@ -1,15 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { startTracking, stopTracking  } from './tracker';
-import { trackingData } from './chronometer';
 import { getWebViewContent } from './webView';
+import { startTracking, stopTracking  } from './tracker';
+import { trackingData, updateStatusBar, statusBarItem } from './chronometer';
 
 //let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-let statusBarItem:vscode.StatusBarItem;
+
 
 (function initializeComponents(){
-	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.command = 'frida-codetracker.showData';
 	statusBarItem.text = '${clock} Frida-CodeTracker: 0:00 min';
 	statusBarItem.show();
@@ -54,18 +53,4 @@ export function deactivate() {
 	stopTracking();
 }
 
-function updateStatusBar(){
-	let totalTime = 0;
-    for (const fileType in trackingData) {
-        totalTime += trackingData[fileType].time;
-    }
-	const totalSeconds = Math.floor(totalTime / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    statusBarItem.text = `$(clock) Frida-CodeTracker: ${formattedTime}`;
-    statusBarItem.show();
-}
-
-export { updateStatusBar, trackingData };
+export { trackingData };

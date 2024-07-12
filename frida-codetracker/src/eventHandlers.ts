@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { ActivityData, MostUsedFileData } from './interfaces';
 import { trackMostUsedFile} from './tracker';
 import { resetInactivityTimer } from './chronometer';
+import { ActivityData, MostUsedFileData } from './interfaces';
 
 
 const fileUsageData:ActivityData = {};

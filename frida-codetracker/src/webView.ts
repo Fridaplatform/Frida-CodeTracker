@@ -1,7 +1,7 @@
 import { mostUsedFiles } from './tracker';
+import { TrackingData } from './interfaces';
 import { activityData } from './eventHandlers';
 import { fileUsageData } from './eventHandlers';
-import { TrackingData } from './interfaces';
 
 
 function getWebViewContent(trackingData: TrackingData) {
